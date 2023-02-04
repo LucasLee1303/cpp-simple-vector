@@ -34,6 +34,19 @@ public:
 
     // Запрещаем присваивание
     ArrayPtr& operator=(const ArrayPtr&) = delete;
+    
+    //Конструктор из временного объекта
+    ArrayPtr(ArrayPtr<Type>&& raw) {
+     raw_ptr_ = std::swap(raw.raw_ptr_, nullptr);
+    }
+
+    //Присвоение временного объекта
+    ArrayPtr<Type>& operator=(ArrayPtr<Type>&& raw) {
+        if (this != &raw) {
+            std::swap(this, raw);
+        }
+        return *(this);
+    }
 
     // Прекращает владением массивом в памяти, возвращает значение адреса массива
     // После вызова метода указатель на массив должен обнулиться
